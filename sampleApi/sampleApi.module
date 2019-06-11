@@ -23,7 +23,7 @@ function sampleApi_menu(){
     return $items;
 }
 
-function sampleApi_services_resources(){
+/*function sampleApi_services_resources(){
     $config_variables = variable_get('sampleapi_config_variables', array());
     $prefix = $config_variables['endpoint_prefix'];
     if(!isset($prefix)){
@@ -178,18 +178,16 @@ function sampleApi_services_resources(){
     );
     // return $my_services;
 }
+function sampleApi_url_inbound_alter(&$path, $original_path, $path_language){
+    $prefix = variable_get('sampleapi_config_variables', array())['endpoint_prefix'];
+    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '-', $path);
+}*/
 
 function _ngo_service_access(){
     return TRUE;
 }
 
-function sampleApi_url_inbound_alter(&$path, $original_path, $path_language){
-    $prefix = variable_get('sampleapi_config_variables', array())['endpoint_prefix'];
-    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '-', $path);
-}
-
 function sampleApi_services_resources_alter(&$resources, &$endpoint){
-    // dpm($resources);
     $temp_resources = array('node','taxonomy_term', 'taxonomy_vocabulary');
     foreach($temp_resources as $temp_resource){
         $resources[$temp_resource]['operations']['retrieve']['file']['module'] = 'sampleApi';
@@ -200,6 +198,4 @@ function sampleApi_services_resources_alter(&$resources, &$endpoint){
         $resources[$temp_resource]['operations']['create']['file']['name'] = 'resource/structure_resource';
         $resources[$temp_resource]['operations']['create']['callback'] = '_sampleApi_' . $temp_resource . '_create';
     }
-
-    // dpm($resources);
 }
