@@ -17,7 +17,7 @@ function sampleApi_main_form($form, $form_state){
     // dpm($types);
     // $allowed_node_types = variable_get('services_allowed_create_content_types', $types);
     // dpm($allowed_node_types);
-    // dpm(_sampleApi_fields_for_content_type('skills'));
+    // dpm(_sampleApi_fields_for_node('skills'));
 
     // dpm(field_read_field('field_designation'));
     // dpm(field_info_instance('node', 'field_designation', 'hero'));
@@ -28,7 +28,7 @@ function sampleApi_main_form($form, $form_state){
     //   $field = field_read_field('field_designation');
 
 
-    // $fields = _sampleApi_fields_for_content_type('skills');
+    // $fields = _sampleApi_fields_for_node('skills');
     // dpm($fields);
     // $required_fields = _sampleApi_required_fields_for_type('skills');
     // dpm($required_fields);
@@ -62,7 +62,7 @@ function _sampleApi_all_fields(){
     return field_info_fields();
 }
 
-function _sampleApi_fields_for_content_type($type){
+function _sampleApi_fields_for_node($type){
     $fields = field_info_fields();
     $required_fields = array();
     foreach($fields as $field){
@@ -86,7 +86,7 @@ function _sampleApi_fields_for($bundle, $entity_type){
 }
 
 function _sampleApi_required_fields_for_type($type){
-    $fields = _sampleApi_fields_for_content_type($type);
+    $fields = _sampleApi_fields_for_node($type);
     foreach($fields as $field => $required){
         $temp = field_info_instance('node', $field, $type);
         if($temp['required'] == 1 || $temp['required'] == TRUE){

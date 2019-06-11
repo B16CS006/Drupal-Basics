@@ -36,7 +36,7 @@ function sampleApi_services_resources(){
         'retrieve' => array(
             'help' => t('Retrieve node using nid'),
             'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_content_type_retrieve',
+            'callback' => '_sampleApi_node_retrieve',
             'access callback' => '_ngo_service_access',
             'args' => array(
                 array(
@@ -51,7 +51,7 @@ function sampleApi_services_resources(){
         'create' => array(
             'help' => t('Create New Content Type'),
             'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_content_type_create',
+            'callback' => '_sampleApi_node_create',
             // 'access callback' => '_ngo_service_access',
             'access arguments' => array('content type resrource create'),
             'access arguments append' => FALSE,
@@ -176,7 +176,7 @@ function sampleApi_services_resources(){
             'access callback' => '_ngo_service_access',
         ),
     );
-    return $my_services;
+    // return $my_services;
 }
 
 function _ngo_service_access(){
@@ -188,27 +188,18 @@ function sampleApi_url_inbound_alter(&$path, $original_path, $path_language){
     $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '-', $path);
 }
 
-function sampleApi_services_resources_alter(&$resources, $endpoint){
-    dpm($resources['node']['operations']['retrieve']['callback']);
-    // $resources['node']['operations']['retrieve']['file']['module'] = 'sampleApi';
-    // $resources['node']['operations']['retrieve']['file']['name'] = 'resource/fields_resource';
-    // $resources['node']['operations']['retrieve']['callback'] = '_sampleApi_content_type_retrieve';
+function sampleApi_services_resources_alter(&$resources, &$endpoint){
+    // dpm($resources);
+    $temp_resources = array('node','taxonomy_term', 'taxonomy_vocabulary');
+    foreach($temp_resources as $temp_resource){
+        $resources[$temp_resource]['operations']['retrieve']['file']['module'] = 'sampleApi';
+        $resources[$temp_resource]['operations']['retrieve']['file']['name'] = 'resource/structure_resource';
+        $resources[$temp_resource]['operations']['retrieve']['callback'] = '_sampleApi_' . $temp_resource . '_retrieve';
 
-    $resources['node']['operations']['retrieve'] = array(
-        'help' => t('Retrieve node using nid'),
-        'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-        'callback' => '_sampleApi_content_type_retrieve',
-        'access callback' => '_ngo_service_access',
-        'args' => array(
-            array(
-                'name' => 'nid',
-                'type' => 'int',
-                'description' => 'Node nid',
-                'source' => array('path' => 0),
-                'optional' => FALSE,
-            ),
-        ),
-    );
+        $resources[$temp_resource]['operations']['create']['file']['module'] = 'sampleApi';
+        $resources[$temp_resource]['operations']['create']['file']['name'] = 'resource/structure_resource';
+        $resources[$temp_resource]['operations']['create']['callback'] = '_sampleApi_' . $temp_resource . '_create';
+    }
 
-    dpm($resources['node']);
+    // dpm($resources);
 }

@@ -1,7 +1,7 @@
 <?php
 
 ///////////////////////////////////////////////////// Content Type ////////////////////////////////////////////////////
-function _sampleApi_content_type_create($data){
+function _sampleApi_node_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     // $node_type = end(explode('/', $_GET['q']));
 
@@ -21,13 +21,13 @@ function _sampleApi_content_type_create($data){
     $node->promote = isset($data->promote)? $data->promote : 1;
     $node->sticky = isset($data->sticky)? $data->sticky : 1;
 
-    module_load_include('inc', 'sampleApi', 'resource/content_type_wrapper_resource');
+    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
     module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($data->type, 'node');
+    $fields = _sampleApi_fields_for($node->type, 'node');
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
         $value = isset($data->$field_name)? $data->$field_name : NULL;
-        $temp('node', $node, $node_type, $field_name, $value);
+        $temp('node', $node, $node->type, $field_name, $value);
     }
 
     return $node;
@@ -41,7 +41,7 @@ function _sampleApi_content_type_create($data){
     return $node;
 }
 
-function _sampleApi_content_type_retrieve($nid){
+function _sampleApi_node_retrieve($nid){
     $node = node_load($nid);
     module_load_include('inc', 'sampleApi', 'resource/fields_resource');
     $fields = _sampleApi_fields_for($node->type, 'node');
@@ -83,7 +83,7 @@ function _sampleApi_taxonomy_term_create($data){
     $term->description = isset($data->description) ? $data->description : NULL;
     
     
-    module_load_include('inc', 'sampleApi', 'resource/content_type_wrapper_resource');
+    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
     module_load_include('inc', 'sampleApi', 'resource/fields_resource');
     $fields = _sampleApi_fields_for($data->vocabulary, 'taxonomy_term');
 
@@ -151,7 +151,7 @@ function _sampleApi_field_collection_create($data){
     $item = entity_create('field_collection_item', array('field_name' => $data->field_collection));
     // $item->setHostEntity('node', $node);
     
-    module_load_include('inc', 'sampleApi', 'resource/content_type_wrapper_resource');
+    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
     module_load_include('inc', 'sampleApi', 'resource/fields_resource');
     $fields = _sampleApi_fields_for($data->field_collection, 'field_collection_item');
 

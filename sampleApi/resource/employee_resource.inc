@@ -8,9 +8,9 @@ function _sampleApi_employee_retrieve($nid){
 }
 
 /*function _sampleApi_employee_create($data){
-    module_load_include('inc', 'sampleApi', 'resource/content_type_wrapper_resource');
+    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
     module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for_content_type('employee');
+    $fields = _sampleApi_fields_for_node('employee');
     if(isset($data) && is_array($data)){
         $data = (object)$data;
     }

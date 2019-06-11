@@ -30,7 +30,7 @@ function sampleApi_services_resources(){
             'create' => array(
                 'help' => t($node_type . ' Create'),
                 'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-                'callback' => '_sampleApi_content_type_create',
+                'callback' => '_sampleApi_node_create',
                 // 'access callback' => '_ngo_service_access',
                 'access arguments' => array($node_type . ' resrource create'),
                 'access arguments append' => FALSE,

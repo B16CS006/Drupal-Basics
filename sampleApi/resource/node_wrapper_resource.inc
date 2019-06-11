@@ -4,12 +4,10 @@ function text_with_summary_wrapper($entity_type, $entity, $bundle, $field_name, 
     if(!isset($entity->language)) $entity->language = LANGUAGE_NONE;
     $field_info = field_info_instance($entity_type, $field_name, $bundle);
     $field_read = field_read_field($field_name);
-
     if(empty($data)){
         if($field_info['required']) return services_error('Missing ' . $field_name . ' attribute');
         else return;
     }
-
     if($field_read['cardinality'] == 0) return;
     else if($field_read['cardinality'] == 1){
         $temp = array();
@@ -37,8 +35,10 @@ function text_with_summary_wrapper($entity_type, $entity, $bundle, $field_name, 
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['value'] = isset($element['value']) ? $element['value'] : $field_info['default_value'];
@@ -86,8 +86,10 @@ function taxonomy_term_reference_wrapper($entity_type, $entity, $bundle, $field_
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['tid'] = isset($element['tid']) ? $element['tid'] : $field_info['default_value'];
@@ -136,8 +138,10 @@ function text_long_wrapper($entity_type, $entity, $bundle, $field_name, $data){
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['value'] = isset($element['value']) ? $element['value'] : $field_info['default_value'];
@@ -201,8 +205,10 @@ function image_wrapper($entity_type, $entity, $bundle, $field_name, $data){
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['fid'] = isset($element['fid']) ? $element['fid'] : $field_info['default_value'];
@@ -261,8 +267,10 @@ function entityreference_wrapper($entity_type, $entity, $bundle, $field_name, $d
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['target_id'] = isset($element['target_id']) ? $element['target_id'] : $field_info['default_value'];
@@ -308,8 +316,10 @@ function list_text_wrapper($entity_type, $entity, $bundle, $field_name, $data){
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['value'] = isset($element['value']) ? $element['value'] : $field_info['default_value'];
@@ -358,8 +368,10 @@ function text_wrapper($entity_type, $entity, $bundle, $field_name, $data){
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['value'] = isset($element['value']) ? $element['value'] : $field_info['default_value'];
@@ -414,8 +426,10 @@ function mobile_number_wrapper($entity_type, $entity, $bundle, $field_name, $dat
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['country'] = isset($element['country'])? $element['country'] : $field_info['default_value'];
@@ -465,8 +479,10 @@ function email_wrapper($entity_type, $entity, $bundle, $field_name, $data){
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['email'] = isset($element['email']) ? $element['email'] : $field_info['default_value'];
@@ -534,8 +550,10 @@ function geofield_wrapper($entity_type, $entity, $bundle, $field_name, $data){
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['geom'] = isset($element['geom'])? $element['geom'] : NULL;
@@ -598,8 +616,10 @@ function field_collection_wrapper($entity_type, $entity, $bundle, $field_name, $
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['value'] = isset($element['value']) ? $element['value'] : $field_info['default_value'];
@@ -646,8 +666,10 @@ function number_integer_wrapper($entity_type, $entity, $bundle, $field_name, $da
         }
         foreach($data as $element){
             if($field_read['cardinality'] >1 && $count >=  $field_read['cardinality']){
+                // return services_error($field_name . ' had cardinality: ' . $field_read['cardinality']);
                 break;
             }
+            $count++;
             if(is_array($element)){
                 $temp = array();
                 $temp['value'] = isset($element['value']) ? $element['value'] : $field_info['default_value'];
