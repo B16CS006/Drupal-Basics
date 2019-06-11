@@ -1,0 +1,141 @@
+<?php
+
+/**
+ * Sample Module to create custom module and Form Api FAPI
+*/
+
+
+
+function sample_init(){
+    /**
+     * This function run first i.e. whenever a page is loaded this function is called.
+     */
+
+    // drupal_set_message('Sample Message');
+}
+
+
+function sample_menu(){
+    /**
+     * This function is used to handle URLs i.e. what happen when a url is searched.
+     */
+
+     $items = array();
+     $items['samples/article/add'] = array(
+         'title' => 'Add New Article',
+         'description' => 'For adding a new article',
+         'page callback' => 'drupal_get_form',
+         'page arguments' => array('sample_add_new_article'),// which thing to open when this page is opened
+         'access callback' => 'user_access', // all user can access this page
+         'file' => 'inc/add_new_article.inc',
+         'access arguments' => array('access content'), // what are the thing it can access
+         'type' => MENU_NORMAL_ITEM,
+     );
+
+     //to communicate with php
+     $items['samples/article/getSample'] = array(
+        'page callback' => 'sample_ajax_get_sample_callHandler',
+        // 'page arguments' => array('sample_ajax_callHandler'),// which thing to open when this page is opened
+        'access callback' => 'user_access', // all user can access this page
+        'file' => 'inc/add_new_article.inc',
+        'access arguments' => array('access content'), // what are the thing it can access
+        'type' => MENU_CALLBACK,
+     );
+     $items['samples/dynamicForm'] = array(
+        'title' => 'Dynamic Form API',
+        'description' => 'How to dynmically change form',
+        'page callback' => 'drupal_get_form',   // When using form api
+        'page arguments' => array('sample_dynamic_form'),// which thing to open when this page is opened
+        'file' => 'inc/dynamic_form.inc',
+        'access callback' => TRUE, // all user can access this page
+     );
+
+     $items['samples/searchHistory'] = array(
+         'title' => 'Search History',
+         'description' => 'Auto complete search history, store all entered value',
+         'page callback' => 'drupal_get_form',
+         'page arguments' => array('sample_search_history_form'),
+         'file' => 'inc/search_history.inc',
+         'access callback' => TRUE,
+     );
+     $items['samples/searchHistoryAutocomplete'] = array(
+         'description' => 'Callback for our search history autocomplete',
+         'page callback' => 'sample_search_history_autocomplete',
+         'file' => 'inc/search_history.inc',
+         'access callback' => TRUE,
+         'type' => MENU_CALLBACK,
+     );
+
+     $items['samples/file-upload'] = array(
+         'title' => 'File Upload',
+         'description' => 'File Uploaded',
+         'page callback' => 'drupal_get_form',
+         'page arguments' => array('file_upload_form'),
+         'file' => 'inc/file_upload.inc',
+         'access callback' => TRUE,
+         'type' => MENU_NORMAL_ITEM,
+     );
+
+     $items['samples/add-remove-item'] = array(
+        'title' => 'Add Remove Items',
+        'description' => 'Add and remove items',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('add_remove_items_form'),
+        'file' => 'inc/add_remove_items.inc',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['samples/add-new-term'] = array(
+        'title' => 'Add New Term',
+        'description' => 'Add New Term',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('add_new_term_form'),
+        'file' => 'inc/add_new_term.inc',
+        'access callback' => TRUE,
+        'type' => MENU_NORMAL_ITEM,
+    );
+    $items['samples/vocubalaryAutocomplete'] = array(
+        'description' => 'Callback for our search vocubalary autocomplete',
+        'page callback' => 'vocubalary_autocomplete',
+        'file' => 'inc/add_new_term.inc',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+    $items['samples/nodeAutocomplete/%'] = array(
+        'description' => 'Callback for node autocomplete',
+        'page callback' => 'node_autocomplete',
+        'page arguments' => array(2),
+        'file' => 'inc/add_new_term.inc',
+        'access callback' => TRUE,
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['samples/add-field-collection-item'] = array(
+        'title' => 'Add Employee Node',
+        'description' => 'Add Employee with field collection',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('add_field_collection_item_form'),
+        'file' => 'inc/add_field_collection_item.inc',
+        'access callback' => TRUE,
+    );
+
+    $items['samples/email-field'] = array(
+        'title' => 'Email',
+        'description' => 'Add Employee with field collection',
+        'page callback' => 'email_mail_page_form',
+        'page arguments' => array(1,2,3),
+        // 'file' => 'inc/add_field_collection_item.inc',
+        'access callback' => TRUE,
+    );
+    
+     return $items;
+}
+
+// function sample_form_alter($form, &$form_state, $form_id){
+//     switch($form_id){
+//         case 'form':{       //which form to alter replace - with _ from id 
+//             break;
+//         }
+//     }
+// }   

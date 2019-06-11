@@ -1,0 +1,5 @@
+name = Sample
+package = Custom Module
+core = 7.x
+type = module
+description = Sample module

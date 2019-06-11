@@ -1,0 +1,177 @@
+<?php
+
+/**
+ * @file
+ * api
+ */
+
+ function api_block_info(){
+     $blocks['api'] = array('info' => t('Custom APIs'));
+     return $blocks;
+ }
+
+ function api_block_view(){
+    $base_url_path = 'http://localhost';
+    $endpoint_path = '/test3';
+    $path_in_service = '/user/login';
+
+    $blocks['content'] = '<h2>Custom APIs</h2>';
+    $option = 0;
+    switch($option){
+        case 1:{
+            dpm('Token = '. drupal_http_request($base_url_path . '/services/session/token')->data);
+            dpm($_COOKIE['drupal_session_name'] . ' = ' . $_COOKIE['drupal_session_id']);
+            break;
+        }
+        case 2:{
+            api_login('admin','admin');
+            break;
+        }
+        case 3:{
+            api_logout();
+            break;
+        }
+        case 4:{
+           /* GET NODE */
+           $get_node_result = api_get_node();
+        //    dpm($get_node_result);
+           $data = json_decode($get_node_result->data);
+           dpm($data);
+           break;
+        }
+        case 5:{
+            /* CREATE NODE */
+            $create_node_result = api_create_node();
+            dpm($create_node_result);
+            break;
+        }
+    }
+    return $blocks;
+ }
+
+
+ /* Node Retrive using GET request */
+
+ function api_get_node(){
+    $base_url_path = 'http://localhost';
+    $endpoint_path = '/test3';
+    $path_in_service = '/node';
+    $url = $base_url_path . $endpoint_path . $path_in_service;
+    $retrieve_single_node = true;
+    if($retrieve_single_node){
+        $node_path = '/7';
+        $url .= $node_path;
+    }else{
+        $paramaters = '?parameters[type]=blob';
+        $url .= $paramaters;
+    }
+    return drupal_http_request($url);
+ }
+
+ /* Node Create using POST request */
+
+ function api_create_node(){
+    $base_url_path = 'http://localhost';
+    $endpoint_path = '/test3';
+    $path_in_service = '/node';
+    $url = $base_url_path . $endpoint_path . $path_in_service;
+    
+    $node_type = 'blob';
+    $node_title = 'Tony Stark' . date('c');
+    $node_body = 'Tony Stark is Ironman.';
+    $node_format = 'filtered_html';
+
+    $node_data = '{
+        "type" : "' . $node_type . '",
+        "title" : "'. $node_title . '",
+        "body" : {
+            "und" : {
+                "0" : {
+                    "value" : "' . $node_body . '",
+                    "format" : "' . $node_format . '"
+                }
+            }
+        }
+    }';
+    // dpm(drupal_http_request($base_url_path . $endpoint_path . '/user/token'), 'POST');
+
+    $node_options = array(
+        'headers' => array(
+            'Content-Type' => 'application/json',
+            'Cookie' => api_login('admin','admin'),
+            // 'X-CSRF-Token' => drupal_http_request($base_url_path . $endpoint_path . '/user/token')->data,
+        ),
+        'method' => 'POST',
+        'data' => $node_data,
+    );
+    $result = drupal_http_request($url, $node_options);
+    return $result;
+ }
+
+ function api_login($username, $password){
+    if(isset($_COOKIE['drupal_session_name']) &&  isset($_COOKIE['drupal_session_id'])){
+        $result = ''. $_COOKIE['drupal_session_name'] . '=' . $_COOKIE['drupal_session_id'] . '';
+        dpm($result);
+        return $result;
+    }
+
+    $base_url_path = 'http://localhost';
+    $endpoint_path = '/test3';
+    $path_in_service = '/user/login';
+    $login_url = $base_url_path . $endpoint_path . $path_in_service;
+
+    $user_data = '{
+        "username" : "' . $username . '",
+        "password" : "' . $password . '"
+    }';
+
+
+    // $user_data = array(
+    //     'username'=> $username,
+    //     'password' => $password
+    // );
+    // $user_options = array(
+    //     'headers' => array('Content-Type' => 'application/x-www-form-urlencoded'),
+    //     'method' => 'POST',
+    //     'data' => http_build_query($user_data,'', '&'),
+    // );
+
+    // dpm($user_data);
+    $user_options = array(
+        'headers' => array('Content-Type' => 'application/json'),
+        'method' => 'POST',
+        'data' => $user_data,
+    );
+
+    // dpm($user_options);
+    $result = drupal_http_request($login_url, $user_options);
+
+    dpm($result);
+
+    if($result->code == 200){
+        $user_data = json_decode($result->data);
+        setcookie('drupal_session_name', $user_data->session_name);
+        setcookie('drupal_session_id', $user_data->sessid);
+        return ''. $user_data->session_name.'='.$user_data->sessid.'';
+    }else return FALSE;
+ }
+
+ function api_logout(){
+    $token = drupal_http_request('http://localhost/services/session/token')->data;
+    $cookie = ''. $_COOKIE['drupal_session_name'] . '=' . $_COOKIE['drupal_session_id'] . '';
+
+    setcookie('drupal_session_name', null);
+    setcookie('drupal_session_id', null);
+
+    // dpm($token);
+    // dpm($cookie);
+    $user_options = array(
+        'headers' => array(
+            'Cookie' => $cookie,
+        ),
+        'method' => 'POST',
+    );
+    dpm($user_options);
+    $result = drupal_http_request('http://localhost/test3/user/logout', $user_options);
+    dpm($result);
+ }

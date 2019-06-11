@@ -1,0 +1,76 @@
+<?php
+
+// function ngos_menu(){
+//     $items = array();
+
+//     $items['ngoss/help'] = array(
+//         'title' => 'help',
+//         'description' => 'help',
+//         // 'page callback' => 'drupal_get_form',   // When using form api
+//         'page arguments' => array('ngos_help_form'),// which thing to open when this page is opened
+//         'file' => 'inc/ngos_help.inc',
+//         'access callback' => TRUE, // all user can access this page
+//      );
+
+//     return $items;
+// }
+
+function ngos_services_resources(){
+    return array(
+        'hello_world' => array(
+            'index' => array(
+                'help' => 'Says "hello world"',
+                'file' => array('type' => 'inc', 'module' => 'ngos', 'name' => 'resources/hello_world.resource'),
+                'callback' => '_ngos_hello_world',
+                'access callback' => '_ngos_services_access',
+                'args' => array(
+                  array(
+                    'name' => 'name',
+                    'type' => 'string',
+                    'description' => 'The person to greet',
+                    'source' => array('path' => '0'),
+                    'optional' => TRUE,
+                  ),
+                ),
+            ),
+        ),
+        'city' => array(
+            'retrieve' => array(
+                'help' => 'Retrieve a city',
+                'file' => array('type' => 'inc', 'module' => 'ngos', 'name' => 'resources/city.resource'),
+                'callback' => '_ngos_city_retrieve',
+                'access callback' => '_ngos_services_access',
+                'args' => array(
+                  array(
+                    'name' => 'id',
+                    'type' => 'int',
+                    'description' => 'TID of the city',
+                    'source' => array('path' => '0'),
+                    'optional' => TRUE,
+                  ),
+                ),
+            ),
+            'create' => array(
+                'help' => 'Create a new city',
+                'file' => array('file' => 'inc', 'module' => 'ngos'),
+                'callback' => '_ngos_city_create',
+                'access arguments' => array('city resrource create'),
+                'access arguments append' => FALSE,
+                'args' => array(
+                    array(
+                        'name' => 'data',
+                        'type' => 'struct',
+                        'description' => 'The city object',
+                        'source' => 'data',
+                        'optional' => FALSE,
+                    ),
+                ),
+            ),
+        ),
+    );
+}
+
+function _ngos_services_access() {
+    return TRUE;
+    // return user_is_logged_in();
+  }

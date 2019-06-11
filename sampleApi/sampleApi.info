@@ -1,0 +1,6 @@
+name = sampleApi
+description = sample api
+core = 7.x
+package = Custom Module
+
+configure = admin/config/custom/sampleapi 

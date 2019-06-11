@@ -1,0 +1,51 @@
+<?php
+    /**
+    * implement hook_menu()
+    * create menu item
+    * temp_medule_menu function will create a meny item which can be access with localhost/path/to/books
+    */
+
+    require_once('books.theme.inc');
+
+    function books_menu(){
+        $items = array();
+        $items['books'] = array(
+            'title' => 'Books View', //page title
+            'description' => 'Books Information',
+            'page callback' => 'books_list',
+            'access callback' => true,
+        );
+        return $items;
+    }
+
+    function books_list(){
+        // return "hello";
+        //select all rows from books table
+
+        //db_select('books')->fields('books', array('field1', 'field2'))->distinct()->countQuery();
+
+        $query = db_select('books', 'tr')
+                 ->fields('tr')
+                 ->condition('is_published', 1);
+        /*
+         $query generates below query
+         SELECT tr.* FROM books tr WHERE tr.is_published = 1
+        */
+        // execute above query to get the results from database table.
+        $result = $query->execute();
+        //send data to custom theme template
+        // theme books_list created under sites/all/themes/custom/fiction/templates/books/books-list.tpl.php
+        $output = theme('books_list', array('data' => $result));
+        return $output;
+    }
+
+    function books_block_info(){
+        $blocks['current_post'] = array(
+            'info' => t('Current Post'), //name that will appear in a block list
+            'status' => TRUE,
+            'region' => 'Content',
+            'visibility' => BLOCK_VISIBILITY_LISTED,
+            'pages' => 'node/*',
+        );
+        return $blocks;
+    }
