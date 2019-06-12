@@ -8,8 +8,8 @@ function _npbs_api_employee_retrieve($nid){
 }
 
 function _npbs_api_employee_create($data){
-    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/node_wrapper_resources');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for_node('employee');
     if(isset($data) && is_array($data)){
         $data = (object)$data;

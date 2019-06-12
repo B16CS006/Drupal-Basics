@@ -21,8 +21,8 @@ function _npbs_api_node_create($data){
     $node->promote = isset($data->promote)? $data->promote : 1;
     $node->sticky = isset($data->sticky)? $data->sticky : 1;
 
-    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/node_wrapper_resources');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($node->type, 'node');
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
@@ -43,7 +43,7 @@ function _npbs_api_node_create($data){
 
 function _npbs_api_node_retrieve($nid){
     $node = node_load($nid);
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($node->type, 'node');
 
     $result = array(
@@ -83,8 +83,8 @@ function _npbs_api_taxonomy_term_create($data){
     $term->description = isset($data->description) ? $data->description : NULL;
     
     
-    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/node_wrapper_resources');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($data->vocabulary, 'taxonomy_term');
 
     foreach($fields as $field_name => $bundle){
@@ -101,7 +101,7 @@ function _npbs_api_taxonomy_term_create($data){
 
 function _npbs_api_taxonomy_term_retrieve($tid){
     $term = taxonomy_term_load($tid);
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($term->vocabulary_machine_name, 'taxonomy_term');
     $result = array(
         'tid' => $term->tid,
@@ -138,7 +138,7 @@ function _npbs_api_taxonomy_vocabulary_create($data){
 function _npbs_api_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
     // return $_GET['q'];
     $voc = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     unset($voc->rdf_mapping);
     return $voc;
 }
@@ -151,8 +151,8 @@ function _npbs_api_field_collection_create($data){
     $item = entity_create('field_collection_item', array('field_name' => $data->field_collection));
     // $item->setHostEntity('node', $node);
     
-    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/node_wrapper_resources');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($data->field_collection, 'field_collection_item');
 
     foreach($fields as $field_name => $bundle){
@@ -182,7 +182,7 @@ function _npbs_api_field_collection_retrieve($item_id){
         'archived' => $term->archived,
     );
 
-    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($term->field_name, 'field_collection_item');
     foreach($fields as $field_name => $bundle){
         $result[$field_name] = $term->{$field_name}[LANGUAGE_NONE]; 

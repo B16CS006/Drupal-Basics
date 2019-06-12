@@ -7,7 +7,7 @@ function npbs_api_menu(){
         'description' => 'Test',
         'page callback' => 'drupal_get_form',
         'page arguments' => array('npbs_api_main_form'),
-        'file' => 'resource/fields_resource.inc',
+        'file' => 'resources/fields_resources.inc',
         'access callback' => TRUE,
     );
     $items['admin/config/custom/npbs_api'] = array(
@@ -35,7 +35,7 @@ function npbs_api_services_resources(){
     $my_services[$prefix . '-node'] = array(
         'retrieve' => array(
             'help' => t('Retrieve node using nid'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_node_retrieve',
             'access callback' => '_npbs_api_service_access',
             'args' => array(
@@ -50,7 +50,7 @@ function npbs_api_services_resources(){
         ),
         'create' => array(
             'help' => t('Create New Content Type'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_node_create',
             'access callback' => '_npbs_api_service_access',
             'access arguments' => array('content type resrource create'),
@@ -69,7 +69,7 @@ function npbs_api_services_resources(){
     $my_services[$prefix . '-taxonomy_term'] = array(
         'retrieve' => array(
             'help' => t('Retrieve Taxonomy Term using tid'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_taxonomy_term_retrieve',
             'access callback' => '_npbs_api_service_access',
             'args' => array(
@@ -84,7 +84,7 @@ function npbs_api_services_resources(){
         ),
         'create' => array(
             'help' => t('Create New Taxonomy Term'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_taxonomy_term_create',
             'access callback' => '_npbs_api_service_access',
             'access arguments' => array('taxonomy_term resrource create'),
@@ -103,7 +103,7 @@ function npbs_api_services_resources(){
     $my_services[$prefix . '-taxonomy_vocabulary'] = array(
         'retrieve' => array(
             'help' => t('Retrieve Taxonomy Vocabulary using tid'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_taxonomy_vocabulary_retrieve',
             'access callback' => '_npbs_api_service_access',
             'args' => array(
@@ -118,7 +118,7 @@ function npbs_api_services_resources(){
         ),
         'create' => array(
             'help' => t('Create New Taxonomy Vocabulary'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_taxonomy_vocabulary_create',
             'access callback' => '_npbs_api_service_access',
             'access arguments' => array('taxonomy_vocabulary resrource create'),
@@ -137,7 +137,7 @@ function npbs_api_services_resources(){
     $my_services[$prefix . '-field_collection_item'] = array(
         'retrieve' => array(
             'help' => t('Retrieve Field Collection using term_id'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_field_collection_retrieve',
             'access callback' => '_npbs_api_service_access',
             'args' => array(
@@ -152,7 +152,7 @@ function npbs_api_services_resources(){
         ),
         'create' => array(
             'help' => t('Create New Field Collection Item'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
             'callback' => '_npbs_api_field_collection_create',
             'access callback' => '_npbs_api_service_access',
             'access arguments' => array('field_collection_item resrource create'),
@@ -171,7 +171,7 @@ function npbs_api_services_resources(){
     $my_services[$prefix . '-allfields'] = array(
         'index' => array(
             'help' => t('Fetch all fields'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/fields_resource'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/fields_resources'),
             'callback' => '_npbs_api_all_fields',
             'access callback' => '_npbs_api_service_access',
         ),
@@ -192,11 +192,11 @@ function npbs_api_services_resources_alter(&$resources, &$endpoint){
     $temp_resources = array('node','taxonomy_term', 'taxonomy_vocabulary');
     foreach($temp_resources as $temp_resource){
         $resources[$temp_resource]['operations']['retrieve']['file']['module'] = 'npbs_api';
-        $resources[$temp_resource]['operations']['retrieve']['file']['name'] = 'resource/structure_resource';
+        $resources[$temp_resource]['operations']['retrieve']['file']['name'] = 'resources/structure_resources';
         $resources[$temp_resource]['operations']['retrieve']['callback'] = '_npbs_api_' . $temp_resource . '_retrieve';
 
         $resources[$temp_resource]['operations']['create']['file']['module'] = 'npbs_api';
-        $resources[$temp_resource]['operations']['create']['file']['name'] = 'resource/structure_resource';
+        $resources[$temp_resource]['operations']['create']['file']['name'] = 'resources/structure_resources';
         $resources[$temp_resource]['operations']['create']['callback'] = '_npbs_api_' . $temp_resource . '_create';
     }
 }
