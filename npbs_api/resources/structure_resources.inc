@@ -3,7 +3,6 @@
 ///////////////////////////////////////////////////// Content Type ////////////////////////////////////////////////////
 function _npbs_api_node_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
-    // $node_type = end(explode('/', $_GET['q']));  // to get the url
 
     global $user;
     if(!isset($user->uid)) return services_error('User is not logged in');
@@ -136,7 +135,6 @@ function _npbs_api_taxonomy_vocabulary_create($data){
 }
 
 function _npbs_api_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
-    // return $_GET['q'];
     $voc = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
     module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     unset($voc->rdf_mapping);
@@ -160,13 +158,6 @@ function _npbs_api_field_collection_create($data){
         $value = isset($data->$field_name)? $data->$field_name : NULL;
         $temp('field_collection_item', $item, $data->field_collection, $field_name, $value);
     }
-
-    // try{
-    //     field_attached_validate('field_collection_item', $item);
-    // }catch(Exception $e){
-    //     print($e->getMessage);
-    //     return NULL;
-    // }
     
     // $item->save();
     return $item;
