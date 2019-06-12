@@ -23,6 +23,171 @@ function npbs_api_menu(){
     return $items;
 }
 
+function npbs_api_services_resources(){
+    $config_variables = variable_get('npbs_api_config_variables', array());
+    $prefix = $config_variables['endpoint_prefix'];
+    if(!isset($prefix)){
+        drupal_set_message('Prefix is not provided');
+        return;
+    }
+
+    $my_services = array();
+    /*$my_services[$prefix . '_node'] = array(
+        'retrieve' => array(
+            'help' => t('Retrieve node using nid'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_node_retrieve',
+            'access callback' => '_npbs_api_service_access',
+            'args' => array(
+                array(
+                    'name' => 'nid',
+                    'type' => 'int',
+                    'description' => 'Node nid',
+                    'source' => array('path' => 0),
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+        'create' => array(
+            'help' => t('Create New Content Type'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_node_create',
+            'access callback' => '_npbs_api_service_access',
+            'access arguments' => array('content type resrource create'),
+            'access arguments append' => FALSE,
+            'args' => array(
+                array(
+                    'name' => 'data',
+                    'type' => 'struct',
+                    'description' => 'The Node object',
+                    'source' => 'data',
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+    );
+    $my_services[$prefix . '_taxonomy_term'] = array(
+        'retrieve' => array(
+            'help' => t('Retrieve Taxonomy Term using tid'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_taxonomy_term_retrieve',
+            'access callback' => '_npbs_api_service_access',
+            'args' => array(
+                array(
+                    'name' => 'tid',
+                    'type' => 'int',
+                    'description' => 'Term tid',
+                    'source' => array('path' => 0),
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+        'create' => array(
+            'help' => t('Create New Taxonomy Term'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_taxonomy_term_create',
+            'access callback' => '_npbs_api_service_access',
+            'access arguments' => array('taxonomy_term resrource create'),
+            'access arguments append' => FALSE,
+            'args' => array(
+                array(
+                    'name' => 'data',
+                    'type' => 'struct',
+                    'description' => 'The Taxonomy Term object',
+                    'source' => 'data',
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+    );
+    $my_services[$prefix . '_taxonomy_vocabulary'] = array(
+        'retrieve' => array(
+            'help' => t('Retrieve Taxonomy Vocabulary using tid'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_taxonomy_vocabulary_retrieve',
+            'access callback' => '_npbs_api_service_access',
+            'args' => array(
+                array(
+                    'name' => 'vocabulary_machine_name',
+                    'type' => 'string',
+                    'description' => 'Vocabulary Machine Name',
+                    'source' => array('path' => 0),
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+        'create' => array(
+            'help' => t('Create New Taxonomy Vocabulary'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_taxonomy_vocabulary_create',
+            'access callback' => '_npbs_api_service_access',
+            'access arguments' => array('taxonomy_vocabulary resrource create'),
+            'access arguments append' => FALSE,
+            'args' => array(
+                array(
+                    'name' => 'data',
+                    'type' => 'struct',
+                    'description' => 'The Taxonomy Vocabulary object',
+                    'source' => 'data',
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+    );*/
+    $my_services[$prefix . '_field_collection_item'] = array(
+        'retrieve' => array(
+            'help' => t('Retrieve Field Collection using term_id'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_field_collection_item_retrieve',
+            'access callback' => '_npbs_api_service_access',
+            'args' => array(
+                array(
+                    'name' => 'term_id',
+                    'type' => 'int',
+                    'description' => 'Field collection term id',
+                    'source' => array('path' => 0),
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+        'create' => array(
+            'help' => t('Create New Field Collection Item'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_field_collection_item_create',
+            'access callback' => '_npbs_api_service_access',
+            'access arguments' => array('field_collection_item resrource create'),
+            'access arguments append' => FALSE,
+            'args' => array(
+                array(
+                    'name' => 'data',
+                    'type' => 'struct',
+                    'description' => 'The Field Collection Item object',
+                    'source' => 'data',
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+    );
+    /*$my_services[$prefix . '_allfields'] = array(
+        'index' => array(
+            'help' => t('Fetch all fields'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/fields_resources'),
+            'callback' => '_npbs_api_all_fields',
+            'access callback' => '_npbs_api_service_access',
+        ),
+    );*/
+    return $my_services;
+}
+
+function npbs_api_url_inbound_alter(&$path, $original_path, $path_language){
+    $prefix = variable_get('npbs_api_config_variables', array())['endpoint_prefix'];
+    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '_', $path); // here sampleapi is endpoint
+}
+
+function _npbs_api_service_access(){
+    return TRUE;
+}
+
 function npbs_api_services_resources_alter(&$resources, &$endpoint){
     //TODO need to set access callback
     $temp_resources = array('node','taxonomy_term', 'taxonomy_vocabulary');

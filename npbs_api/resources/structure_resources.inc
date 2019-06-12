@@ -1,5 +1,16 @@
 <?php
 
+function check_enabled($entity_type, $element = NULL){
+    $is_element_enabled = variable_get('npbs_api_config_variables', array())[$entity_type];
+    $result = '';
+    if($element !== NULL){
+        $is_element_enabled = $is_element_enabled[$element];
+        $result = '->' . $element;
+    }
+    if(!$is_element_enabled) return services_error($entity_type . $result . ' is not enabled.');
+    return TRUE;
+}
+
 ///////////////////////////////////////////////////// Content Type ////////////////////////////////////////////////////
 function _npbs_api_node_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
@@ -8,8 +19,7 @@ function _npbs_api_node_create($data){
     if(!isset($user->uid)) return services_error('User is not logged in');
     if(empty($data->title)) return services_error('Missing required attribute title', 406);
     if(empty($data->type)) return services_error('Missing required attribute type', 406);
-    else if(!in_array($data->type, array_keys(field_info_bundles()['node']))) return services_error('Such content type not found');
-
+    else check_enabled('node', $data->type);
     $node = (object)NULL;
     $node->type = $data->type;
     node_object_prepare($node);
@@ -42,6 +52,7 @@ function _npbs_api_node_create($data){
 
 function _npbs_api_node_retrieve($nid){
     $node = node_load($nid);
+    check_enabled('node', $node->type);
     module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($node->type, 'node');
 
@@ -69,10 +80,11 @@ function _npbs_api_node_retrieve($nid){
 ///////////////////////////////////////////////////// Taxonomy Term ////////////////////////////////////////////////////
 function _npbs_api_taxonomy_term_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
-    if(empty($data->vocabulary)) return services_error('Missing Required attribute vocabulary', 406);
+    if(empty($data->vocabulary_machine_name)) return services_error('Missing Required attribute vocabulary_machine_name', 406);
     if(!isset($data->name)) return services_error('Missing required attribute name',406);
+    else check_enabled('taxonomy_term', $data->vocabulary_machine_name);
     
-    $voc = taxonomy_vocabulary_machine_name_load($data->vocabulary);
+    $voc = taxonomy_vocabulary_machine_name_load($data->vocabulary_machine_name);
     if(!isset($voc->vid)) return services_error('Invalid Taxonomy Vocabulary machine name');
     
     $term = (object)NULL;
@@ -84,12 +96,12 @@ function _npbs_api_taxonomy_term_create($data){
     
     module_load_include('inc', 'npbs_api', 'resources/node_wrapper_resources');
     module_load_include('inc', 'npbs_api', 'resources/fields_resources');
-    $fields = _npbs_api_fields_for($data->vocabulary, 'taxonomy_term');
+    $fields = _npbs_api_fields_for($data->vocabulary_machine_name, 'taxonomy_term');
 
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
         $value = isset($data->$field_name)? $data->$field_name : NULL;
-        $temp('taxonomy_term', $term, $data->vocabulary, $field_name, $value);
+        $temp('taxonomy_term', $term, $data->vocabulary_machine_name, $field_name, $value);
     }
 
     return $term;
@@ -100,6 +112,7 @@ function _npbs_api_taxonomy_term_create($data){
 
 function _npbs_api_taxonomy_term_retrieve($tid){
     $term = taxonomy_term_load($tid);
+    check_enabled('taxonomy_term', $term->vocabulary_machine_name);
     module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     $fields = _npbs_api_fields_for($term->vocabulary_machine_name, 'taxonomy_term');
     $result = array(
@@ -121,6 +134,7 @@ function _npbs_api_taxonomy_vocabulary_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->name)) return services_error('Missing Required attribute name', 406);
     if(empty($data->machine_name)) return services_error('Missing Required attribute machine_name', 406);
+    else check_enabled('taxonomy_vocabulary');
 
     $vocavulary = (object)NULL;
     $vocavulary->name = $data->name;
@@ -136,35 +150,38 @@ function _npbs_api_taxonomy_vocabulary_create($data){
 
 function _npbs_api_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
     $voc = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
+    check_enabled('taxonomy_vocabulary');
     module_load_include('inc', 'npbs_api', 'resources/fields_resources');
     unset($voc->rdf_mapping);
     return $voc;
 }
 
 ///////////////////////////////////////////////////// Field Collection Item ////////////////////////////////////////////////////
-function _npbs_api_field_collection_create($data){
+function _npbs_api_field_collection_item_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
-    if(empty($data->field_collection)) return services_error('Missing Required attribute field_collection', 406);
+    if(empty($data->field_collection_item)) return services_error('Missing Required attribute field_collection_item', 406);
+    else check_enabled('field_collection_item', $data->field_collection_item);
     
-    $item = entity_create('field_collection_item', array('field_name' => $data->field_collection));
+    $item = entity_create('field_collection_item', array('field_name' => $data->field_collection_item));
     // $item->setHostEntity('node', $node);
     
     module_load_include('inc', 'npbs_api', 'resources/node_wrapper_resources');
     module_load_include('inc', 'npbs_api', 'resources/fields_resources');
-    $fields = _npbs_api_fields_for($data->field_collection, 'field_collection_item');
+    $fields = _npbs_api_fields_for($data->field_collection_item, 'field_collection_item');
 
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
         $value = isset($data->$field_name)? $data->$field_name : NULL;
-        $temp('field_collection_item', $item, $data->field_collection, $field_name, $value);
+        $temp('field_collection_item', $item, $data->field_collection_item, $field_name, $value);
     }
     
     // $item->save();
     return $item;
 }
 
-function _npbs_api_field_collection_retrieve($item_id){
+function _npbs_api_field_collection_item_retrieve($item_id){
     $term = entity_load_single('field_collection_item', array($item_id));
+    check_enabled('field_collection_item', $term->field_name);
     $result = array(
         'term_id' => $term->term_id,
         'revision_id' => $term->revision_id,

@@ -581,7 +581,7 @@ function geofield_wrapper($entity_type, $entity, $bundle, $field_name, $data){
     }
 }
 
-function field_collection_wrapper($entity_type, $entity, $bundle, $field_name, $data){
+function field_collection_item_wrapper($entity_type, $entity, $bundle, $field_name, $data){
     if(!isset($entity->language)) $entity->language = LANGUAGE_NONE;
     $field_info = field_info_instance($entity_type, $field_name, $bundle);
     $field_read = field_read_field($field_name);
