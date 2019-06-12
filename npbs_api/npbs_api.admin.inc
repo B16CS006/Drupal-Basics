@@ -1,10 +1,7 @@
 <?php
 
-function sampleApi_config_form($form, &$form_state){
-
-    if ($form_state['rebuild']) {
-        $form_state['input'] = array();
-    }
+function npbs_api_config_form($form, &$form_state){
+    if ($form_state['rebuild']) $form_state['input'] = array();
 
     $node = array();
     $taxonomy_term = array();
@@ -17,7 +14,7 @@ function sampleApi_config_form($form, &$form_state){
     unset($bundles);
 
     $form['#tree'] = TRUE;
-    $config_variables = variable_get('sampleapi_config_variables', array());
+    $config_variables = variable_get('npbs_api_config_variables', array());
 
     if(!isset($config_variables['endpoint_prefix'])) $config_variables['endpoint_prefix'] = '';
     if(!isset($config_variables['taxonomy_vocabulary'])) $config_variables['taxonomy_vocabulary'] = FALSE;
@@ -79,31 +76,6 @@ function sampleApi_config_form($form, &$form_state){
                 '#default_value' => $config_variables['field_collection_item'][$key],
             );    
         }
-        
-        // $form['node'] = array(
-        //     '#tree' => TRUE,
-        //     '#title' => t('Content Types'),
-        //     '#type' => 'checkboxes',
-        //     // '#description' => 'Enable services for checked Content Types',
-        //     '#options' => $node,
-        //     '#default_value' => $config_variables['node'],
-        // );
-    
-        // $form['taxonomy_term'] = array(
-        //     '#title' => t('Taxonomy Terms'),
-        //     '#type' => 'checkboxes',
-        //     // '#description' => 'Enable services for checked Taxonomy Terms',
-        //     '#options' => $taxonomy_term,
-        //     '#default_value' => $config_variables['taxonomy_term'],
-        // );
-    
-        // $form['field_collection_item'] = array(
-        //     '#title' => t('Field Collections'),
-        //     '#type' => 'checkboxes',
-        //     // '#description' => 'Enable services for checked Field Collections',
-        //     '#options' => $field_collection_item,
-        //     '#default_value' => $config_variables['field_collection_item'],
-        // );
     }
 
     $form['taxonomy_vocabulary'] = array(
@@ -111,7 +83,6 @@ function sampleApi_config_form($form, &$form_state){
         '#type' => 'checkbox',
         '#default_value' => $config_variables['taxonomy_vocabulary'],
     );
-
 
     $form['submit'] = array(
         '#type' => 'submit',
@@ -121,14 +92,13 @@ function sampleApi_config_form($form, &$form_state){
     return $form;
 }
 
-function sampleApi_config_form_submit($form, $form_state){
+function npbs_api_config_form_submit($form, $form_state){
     $config_variables = array();
     $config_variables['endpoint_prefix'] = $form_state['values']['endpoint_prefix'];
     $config_variables['taxonomy_vocabulary'] = $form_state['values']['taxonomy_vocabulary'];
     $config_variables['node'] = $form_state['values']['node'];
     $config_variables['taxonomy_term'] = $form_state['values']['taxonomy_term'];
     $config_variables['field_collection_item'] = $form_state['values']['field_collection_item'];
-    $result = variable_set('sampleapi_config_variables', $config_variables);
+    $result = variable_set('npbs_api_config_variables', $config_variables);
     drupal_set_message('Successfully Updated');
-
 }

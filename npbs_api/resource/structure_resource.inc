@@ -1,9 +1,9 @@
 <?php
 
 ///////////////////////////////////////////////////// Content Type ////////////////////////////////////////////////////
-function _sampleApi_node_create($data){
+function _npbs_api_node_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
-    // $node_type = end(explode('/', $_GET['q']));
+    // $node_type = end(explode('/', $_GET['q']));  // to get the url
 
     global $user;
     if(!isset($user->uid)) return services_error('User is not logged in');
@@ -21,9 +21,9 @@ function _sampleApi_node_create($data){
     $node->promote = isset($data->promote)? $data->promote : 1;
     $node->sticky = isset($data->sticky)? $data->sticky : 1;
 
-    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($node->type, 'node');
+    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for($node->type, 'node');
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
         $value = isset($data->$field_name)? $data->$field_name : NULL;
@@ -41,10 +41,10 @@ function _sampleApi_node_create($data){
     return $node;
 }
 
-function _sampleApi_node_retrieve($nid){
+function _npbs_api_node_retrieve($nid){
     $node = node_load($nid);
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($node->type, 'node');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for($node->type, 'node');
 
     $result = array(
         'vid' => $node->vid,
@@ -68,7 +68,7 @@ function _sampleApi_node_retrieve($nid){
 }
 
 ///////////////////////////////////////////////////// Taxonomy Term ////////////////////////////////////////////////////
-function _sampleApi_taxonomy_term_create($data){
+function _npbs_api_taxonomy_term_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->vocabulary)) return services_error('Missing Required attribute vocabulary', 406);
     if(!isset($data->name)) return services_error('Missing required attribute name',406);
@@ -83,9 +83,9 @@ function _sampleApi_taxonomy_term_create($data){
     $term->description = isset($data->description) ? $data->description : NULL;
     
     
-    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($data->vocabulary, 'taxonomy_term');
+    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for($data->vocabulary, 'taxonomy_term');
 
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
@@ -99,10 +99,10 @@ function _sampleApi_taxonomy_term_create($data){
     return $result;
 }
 
-function _sampleApi_taxonomy_term_retrieve($tid){
+function _npbs_api_taxonomy_term_retrieve($tid){
     $term = taxonomy_term_load($tid);
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($term->vocabulary_machine_name, 'taxonomy_term');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for($term->vocabulary_machine_name, 'taxonomy_term');
     $result = array(
         'tid' => $term->tid,
         'vid' => $term->vid,
@@ -118,7 +118,7 @@ function _sampleApi_taxonomy_term_retrieve($tid){
 }
 
 ///////////////////////////////////////////////////// Taxonomy Vocabulary ////////////////////////////////////////////////////
-function _sampleApi_taxonomy_vocabulary_create($data){
+function _npbs_api_taxonomy_vocabulary_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->name)) return services_error('Missing Required attribute name', 406);
     if(empty($data->machine_name)) return services_error('Missing Required attribute machine_name', 406);
@@ -135,25 +135,25 @@ function _sampleApi_taxonomy_vocabulary_create($data){
     return $result;
 }
 
-function _sampleApi_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
+function _npbs_api_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
     // return $_GET['q'];
     $voc = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
     unset($voc->rdf_mapping);
     return $voc;
 }
 
 ///////////////////////////////////////////////////// Field Collection Item ////////////////////////////////////////////////////
-function _sampleApi_field_collection_create($data){
+function _npbs_api_field_collection_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->field_collection)) return services_error('Missing Required attribute field_collection', 406);
     
     $item = entity_create('field_collection_item', array('field_name' => $data->field_collection));
     // $item->setHostEntity('node', $node);
     
-    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($data->field_collection, 'field_collection_item');
+    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for($data->field_collection, 'field_collection_item');
 
     foreach($fields as $field_name => $bundle){
         $temp = $bundle . '_wrapper';
@@ -172,7 +172,7 @@ function _sampleApi_field_collection_create($data){
     return $item;
 }
 
-function _sampleApi_field_collection_retrieve($item_id){
+function _npbs_api_field_collection_retrieve($item_id){
     $term = entity_load_single('field_collection_item', array($item_id));
     $result = array(
         'term_id' => $term->term_id,
@@ -182,8 +182,8 @@ function _sampleApi_field_collection_retrieve($item_id){
         'archived' => $term->archived,
     );
 
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for($term->field_name, 'field_collection_item');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for($term->field_name, 'field_collection_item');
     foreach($fields as $field_name => $bundle){
         $result[$field_name] = $term->{$field_name}[LANGUAGE_NONE]; 
     }

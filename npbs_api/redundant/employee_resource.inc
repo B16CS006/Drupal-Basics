@@ -1,16 +1,16 @@
 <?php
 
-function _sampleApi_employee_retrieve($nid){
+function _npbs_api_employee_retrieve($nid){
     // return $nid;
     $node = node_load($nid);
     // echo $node;
     return $node;
 }
 
-/*function _sampleApi_employee_create($data){
-    module_load_include('inc', 'sampleApi', 'resource/node_wrapper_resource');
-    module_load_include('inc', 'sampleApi', 'resource/fields_resource');
-    $fields = _sampleApi_fields_for_node('employee');
+function _npbs_api_employee_create($data){
+    module_load_include('inc', 'npbs_api', 'resource/node_wrapper_resource');
+    module_load_include('inc', 'npbs_api', 'resource/fields_resource');
+    $fields = _npbs_api_fields_for_node('employee');
     if(isset($data) && is_array($data)){
         $data = (object)$data;
     }
@@ -52,4 +52,4 @@ function _sampleApi_employee_retrieve($nid){
     // return node_save($node);
 
     return $node;
-}*/
+}

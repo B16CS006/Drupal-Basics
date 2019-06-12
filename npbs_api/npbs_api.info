@@ -1,0 +1,6 @@
+name = NPBS API
+description = to simplify the drupal inbuild api structure
+core = 7.x
+package = Custom Module
+
+configure = admin/config/custom/npbs_api

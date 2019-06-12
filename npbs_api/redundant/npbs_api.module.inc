@@ -1,6 +1,6 @@
 <?php
 
-function sampleApi_services_resources(){
+function npbs_api_services_resources(){
 
     $my_services = array();
     // return $my_services;
@@ -14,9 +14,9 @@ function sampleApi_services_resources(){
         $my_services[$node_type] = array(
             'retrieve' => array(
                 'help' => t($node_type . ' Retrieve'),
-                'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/'. $node_type . '_resource'),
-                'callback' => '_sampleApi_' . $node_type . '_retrieve',
-                'access callback' => '_ngo_service_access',
+                'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/'. $node_type . '_resource'),
+                'callback' => '_npbs_api_' . $node_type . '_retrieve',
+                'access callback' => '_npbs_api_service_access',
                 'args' => array(
                     array(
                         'name' => 'nid',
@@ -29,9 +29,9 @@ function sampleApi_services_resources(){
             ),
             'create' => array(
                 'help' => t($node_type . ' Create'),
-                'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-                'callback' => '_sampleApi_node_create',
-                // 'access callback' => '_ngo_service_access',
+                'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+                'callback' => '_npbs_api_node_create',
+                // 'access callback' => '_npbs_api_service_access',
                 'access arguments' => array($node_type . ' resrource create'),
                 'access arguments append' => FALSE,
                 'args' => array(
@@ -50,18 +50,18 @@ function sampleApi_services_resources(){
     $my_services['allfields'] = array(
         'index' => array(
             'help' => t('Fetch all fields'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/fields_resource'),
-            'callback' => '_sampleApi_all_fields',
-            'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/fields_resource'),
+            'callback' => '_npbs_api_all_fields',
+            'access callback' => '_npbs_api_service_access',
         ),
     );
 
     $my_services['term'] = array(
         'create' => array(
             'help' => t('Taxonomy Term Create'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_taxonomy_term_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_taxonomy_term_create',
+            // 'access callback' => '_npbs_api_service_access',
             'access arguments' => array($node_type . ' resrource create'),
             'access arguments append' => FALSE,
             'args' => array(
@@ -78,9 +78,9 @@ function sampleApi_services_resources(){
     $my_services['vocabulary'] = array(
         'create' => array(
             'help' => t('Taxonomy Vocabulary Create'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_taxonomy_vocabulary_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_taxonomy_vocabulary_create',
+            // 'access callback' => '_npbs_api_service_access',
             'access arguments' => array($node_type . ' resrource create'),
             'access arguments append' => FALSE,
             'args' => array(
@@ -97,9 +97,9 @@ function sampleApi_services_resources(){
     $my_services['field_collection'] = array(
         'create' => array(
             'help' => t('Field Collection Create'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_field_collection_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_field_collection_create',
+            // 'access callback' => '_npbs_api_service_access',
             'access arguments' => array($node_type . ' resrource create'),
             'access arguments append' => FALSE,
             'args' => array(

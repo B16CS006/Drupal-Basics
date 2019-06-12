@@ -1,30 +1,30 @@
 <?php
 
-function sampleApi_menu(){
+function npbs_api_menu(){
     $items = array();
-    $items['sampleApis/test'] = array(
+    $items['npbs_apis/test'] = array(
         'title' => 'Test',
         'description' => 'Test',
         'page callback' => 'drupal_get_form',
-        'page arguments' => array('sampleApi_main_form'),
+        'page arguments' => array('npbs_api_main_form'),
         'file' => 'resource/fields_resource.inc',
         'access callback' => TRUE,
     );
-    $items['admin/config/custom/sampleapi'] = array(
+    $items['admin/config/custom/npbs_api'] = array(
         'title' => 'Sample API',
-        'description' => 'Configure sampleApi module',
+        'description' => 'Configure npbs_api module',
         'type' => MENU_NORMAL_ITEM,
         'page callback' => 'drupal_get_form',
-        'page arguments' => array('sampleApi_config_form'),
+        'page arguments' => array('npbs_api_config_form'),
         'access arguments' => array('administer site configuration'),   
-        'file' => 'sampleApi.admin.inc',
+        'file' => 'npbs_api.admin.inc',
       );
 
     return $items;
 }
 
-/*function sampleApi_services_resources(){
-    $config_variables = variable_get('sampleapi_config_variables', array());
+function npbs_api_services_resources(){
+    $config_variables = variable_get('npbs_api_config_variables', array());
     $prefix = $config_variables['endpoint_prefix'];
     if(!isset($prefix)){
         drupal_set_message('Prefix is not provided');
@@ -35,9 +35,9 @@ function sampleApi_menu(){
     $my_services[$prefix . '-node'] = array(
         'retrieve' => array(
             'help' => t('Retrieve node using nid'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_node_retrieve',
-            'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_node_retrieve',
+            'access callback' => '_npbs_api_service_access',
             'args' => array(
                 array(
                     'name' => 'nid',
@@ -50,9 +50,9 @@ function sampleApi_menu(){
         ),
         'create' => array(
             'help' => t('Create New Content Type'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_node_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_node_create',
+            'access callback' => '_npbs_api_service_access',
             'access arguments' => array('content type resrource create'),
             'access arguments append' => FALSE,
             'args' => array(
@@ -69,9 +69,9 @@ function sampleApi_menu(){
     $my_services[$prefix . '-taxonomy_term'] = array(
         'retrieve' => array(
             'help' => t('Retrieve Taxonomy Term using tid'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_taxonomy_term_retrieve',
-            'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_taxonomy_term_retrieve',
+            'access callback' => '_npbs_api_service_access',
             'args' => array(
                 array(
                     'name' => 'tid',
@@ -84,9 +84,9 @@ function sampleApi_menu(){
         ),
         'create' => array(
             'help' => t('Create New Taxonomy Term'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_taxonomy_term_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_taxonomy_term_create',
+            'access callback' => '_npbs_api_service_access',
             'access arguments' => array('taxonomy_term resrource create'),
             'access arguments append' => FALSE,
             'args' => array(
@@ -103,9 +103,9 @@ function sampleApi_menu(){
     $my_services[$prefix . '-taxonomy_vocabulary'] = array(
         'retrieve' => array(
             'help' => t('Retrieve Taxonomy Vocabulary using tid'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_taxonomy_vocabulary_retrieve',
-            'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_taxonomy_vocabulary_retrieve',
+            'access callback' => '_npbs_api_service_access',
             'args' => array(
                 array(
                     'name' => 'vocabulary_machine_name',
@@ -118,9 +118,9 @@ function sampleApi_menu(){
         ),
         'create' => array(
             'help' => t('Create New Taxonomy Vocabulary'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_taxonomy_vocabulary_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_taxonomy_vocabulary_create',
+            'access callback' => '_npbs_api_service_access',
             'access arguments' => array('taxonomy_vocabulary resrource create'),
             'access arguments append' => FALSE,
             'args' => array(
@@ -137,9 +137,9 @@ function sampleApi_menu(){
     $my_services[$prefix . '-field_collection_item'] = array(
         'retrieve' => array(
             'help' => t('Retrieve Field Collection using term_id'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_field_collection_retrieve',
-            'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_field_collection_retrieve',
+            'access callback' => '_npbs_api_service_access',
             'args' => array(
                 array(
                     'name' => 'term_id',
@@ -152,9 +152,9 @@ function sampleApi_menu(){
         ),
         'create' => array(
             'help' => t('Create New Field Collection Item'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/structure_resource'),
-            'callback' => '_sampleApi_field_collection_create',
-            // 'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/structure_resource'),
+            'callback' => '_npbs_api_field_collection_create',
+            'access callback' => '_npbs_api_service_access',
             'access arguments' => array('field_collection_item resrource create'),
             'access arguments append' => FALSE,
             'args' => array(
@@ -171,31 +171,32 @@ function sampleApi_menu(){
     $my_services[$prefix . '-allfields'] = array(
         'index' => array(
             'help' => t('Fetch all fields'),
-            'file' => array('type' => 'inc', 'module' => 'sampleApi', 'name' => 'resource/fields_resource'),
-            'callback' => '_sampleApi_all_fields',
-            'access callback' => '_ngo_service_access',
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resource/fields_resource'),
+            'callback' => '_npbs_api_all_fields',
+            'access callback' => '_npbs_api_service_access',
         ),
     );
-    // return $my_services;
+    return $my_services;
 }
-function sampleApi_url_inbound_alter(&$path, $original_path, $path_language){
-    $prefix = variable_get('sampleapi_config_variables', array())['endpoint_prefix'];
-    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '-', $path);
-}*/
 
-function _ngo_service_access(){
+function npbs_api_url_inbound_alter(&$path, $original_path, $path_language){
+    $prefix = variable_get('npbs_api_config_variables', array())['endpoint_prefix'];
+    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '-', $path); // here sampleapi is endpoint
+}
+
+function _npbs_api_service_access(){
     return TRUE;
 }
 
-function sampleApi_services_resources_alter(&$resources, &$endpoint){
+function npbs_api_services_resources_alter(&$resources, &$endpoint){
     $temp_resources = array('node','taxonomy_term', 'taxonomy_vocabulary');
     foreach($temp_resources as $temp_resource){
-        $resources[$temp_resource]['operations']['retrieve']['file']['module'] = 'sampleApi';
+        $resources[$temp_resource]['operations']['retrieve']['file']['module'] = 'npbs_api';
         $resources[$temp_resource]['operations']['retrieve']['file']['name'] = 'resource/structure_resource';
-        $resources[$temp_resource]['operations']['retrieve']['callback'] = '_sampleApi_' . $temp_resource . '_retrieve';
+        $resources[$temp_resource]['operations']['retrieve']['callback'] = '_npbs_api_' . $temp_resource . '_retrieve';
 
-        $resources[$temp_resource]['operations']['create']['file']['module'] = 'sampleApi';
+        $resources[$temp_resource]['operations']['create']['file']['module'] = 'npbs_api';
         $resources[$temp_resource]['operations']['create']['file']['name'] = 'resource/structure_resource';
-        $resources[$temp_resource]['operations']['create']['callback'] = '_sampleApi_' . $temp_resource . '_create';
+        $resources[$temp_resource]['operations']['create']['callback'] = '_npbs_api_' . $temp_resource . '_create';
     }
 }
