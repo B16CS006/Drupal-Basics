@@ -1,0 +1,43 @@
+<?php
+
+function npbs_neo4j_menu(){
+
+}
+
+/**
+ * Implement hook_block_info().
+ */
+function npbs_neo4j_block_info(){
+    return [
+        'neo4j_reccomendation' => [
+            'info' => t('Neo4j Content Reccomendation'),
+            'cache' => DRUPAL_NO_CACHE,
+        ],
+    ];
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function npbs_neo4j_block_view($delta = ''){
+    $block = [];
+
+    switch($delta){
+        case 'neo4j_reccomendation':
+            $block['subject'] = t('Reccomendation Content');
+            $block['content'] = []; 
+            if(($page_node = menu_get_object())){
+                $reccomended_nodes = _nbps_neo4j_get_reccomendation($page_node->nid);
+                $links = array_map(function ($node){
+                    return l($node->title, "node/{$node->nid}");
+                }, $reccomended_nodes);
+
+                $block['content'] = [
+                    '#theme' => 'item_list',
+                    '#items' => $links,
+                ];
+            }
+            break;
+    }
+    return $block;
+}

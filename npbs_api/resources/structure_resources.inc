@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * check whether the entity type is enabled or not
+ */
 function check_enabled($entity_type, $element = NULL){
     $is_element_enabled = variable_get('npbs_api_config_variables', array())[$entity_type];
     $result = '';
@@ -11,7 +14,9 @@ function check_enabled($entity_type, $element = NULL){
     return TRUE;
 }
 
-///////////////////////////////////////////////////// Content Type ////////////////////////////////////////////////////
+/**
+ * For creating new content type element
+ */
 function _npbs_api_node_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
 
@@ -39,17 +44,19 @@ function _npbs_api_node_create($data){
         $temp('node', $node, $node->type, $field_name, $value);
     }
 
-    return $node;
+    // Todo find out why below is not working
+    // Validate the node. If there is validation error Exception will be thrown so code below won't be executed.
+    // _node_resource_validate_type($node);
 
-    // Validate the node. If there is validation error Exception will be thrown
-    // so code below won't be executed.
-    _node_resource_validate_type($node);
     $node = node_submit($node);
-    return node_save($node);
+    node_save($node);
 
     return $node;
 }
 
+/**
+ * For retrieve a content type using nid
+ */
 function _npbs_api_node_retrieve($nid){
     $node = node_load($nid);
     check_enabled('node', $node->type);
@@ -77,7 +84,10 @@ function _npbs_api_node_retrieve($nid){
     return $result;
 }
 
-///////////////////////////////////////////////////// Taxonomy Term ////////////////////////////////////////////////////
+
+/**
+ * For Creating a taxonomy_term of some taxonomy_vocabulary
+ */
 function _npbs_api_taxonomy_term_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->vocabulary_machine_name)) return services_error('Missing Required attribute vocabulary_machine_name', 406);
@@ -110,6 +120,9 @@ function _npbs_api_taxonomy_term_create($data){
     return $result;
 }
 
+/**
+ * For retrieving the taxonomy_term using tid
+ */
 function _npbs_api_taxonomy_term_retrieve($tid){
     $term = taxonomy_term_load($tid);
     check_enabled('taxonomy_term', $term->vocabulary_machine_name);
@@ -129,7 +142,10 @@ function _npbs_api_taxonomy_term_retrieve($tid){
     return $result;
 }
 
-///////////////////////////////////////////////////// Taxonomy Vocabulary ////////////////////////////////////////////////////
+
+/**
+ * For creating new taxonomy_vocabulary
+ */
 function _npbs_api_taxonomy_vocabulary_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->name)) return services_error('Missing Required attribute name', 406);
@@ -148,6 +164,9 @@ function _npbs_api_taxonomy_vocabulary_create($data){
     return $result;
 }
 
+/**
+ * For Retrieve a taxonomy_vocabulary using machine_name
+ */
 function _npbs_api_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
     $voc = taxonomy_vocabulary_machine_name_load($vocabulary_machine_name);
     check_enabled('taxonomy_vocabulary');
@@ -156,7 +175,10 @@ function _npbs_api_taxonomy_vocabulary_retrieve($vocabulary_machine_name){
     return $voc;
 }
 
-///////////////////////////////////////////////////// Field Collection Item ////////////////////////////////////////////////////
+
+/**
+ * For Creating a new field_collection_item element
+ */
 function _npbs_api_field_collection_item_create($data){
     if(isset($data) && is_array($data)) $data = (object)$data;
     if(empty($data->field_collection_item)) return services_error('Missing Required attribute field_collection_item', 406);
@@ -179,6 +201,9 @@ function _npbs_api_field_collection_item_create($data){
     return $item;
 }
 
+/**
+ * For retrieving a field_collection_item using item_id
+ */
 function _npbs_api_field_collection_item_retrieve($item_id){
     $term = entity_load_single('field_collection_item', array($item_id));
     check_enabled('field_collection_item', $term->field_name);

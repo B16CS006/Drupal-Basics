@@ -1,0 +1,6 @@
+name = NPBS neo4j
+description = graph database
+core = 7.x
+package = Custom Module
+
+dependencies[] = neo4j

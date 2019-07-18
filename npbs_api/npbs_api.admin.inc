@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * hook_form
+ */
 function npbs_api_config_form($form, &$form_state){
     if ($form_state['rebuild']) $form_state['input'] = array();
 
@@ -92,6 +95,9 @@ function npbs_api_config_form($form, &$form_state){
     return $form;
 }
 
+/**
+ * hook_form_submit
+ */
 function npbs_api_config_form_submit($form, $form_state){
     $config_variables = array();
     $config_variables['endpoint_prefix'] = $form_state['values']['endpoint_prefix'];

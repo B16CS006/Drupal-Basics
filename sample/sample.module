@@ -5,21 +5,17 @@
 */
 
 
-
+/**
+ * This function run first i.e. whenever a page is loaded this function is called.
+ */
 function sample_init(){
-    /**
-     * This function run first i.e. whenever a page is loaded this function is called.
-     */
-
     // drupal_set_message('Sample Message');
 }
 
-
+/**
+ * This function is used to handle URLs i.e. what happen when a url is searched.
+ */
 function sample_menu(){
-    /**
-     * This function is used to handle URLs i.e. what happen when a url is searched.
-     */
-
      $items = array();
      $items['samples/article/add'] = array(
          'title' => 'Add New Article',

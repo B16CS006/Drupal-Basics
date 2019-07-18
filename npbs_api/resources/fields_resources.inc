@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Return the required filelds for an entity_type
+ */
 function _npbs_api_fields_for($bundle, $entity_type){
     $fields = field_info_fields();
     $required_fields = array();
@@ -11,6 +14,9 @@ function _npbs_api_fields_for($bundle, $entity_type){
     return $required_fields;
 }
 
+/**
+ * Convert title to nid return only fist match
+ */
 function _convert_name_to_nid($title, $type){
     $result = db_select('node')
         ->fields('node', array('nid'))
@@ -22,6 +28,9 @@ function _convert_name_to_nid($title, $type){
     return $result[0];
 }
 
+/**
+ * convert taxonomy_term name to its tid return only fist match
+ */
 function _convert_name_to_tid($name){
     $result = db_select('taxonomy_term_data')
     ->fields('taxonomy_term_data', array('tid'))

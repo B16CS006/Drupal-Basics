@@ -1,13 +1,17 @@
 <?php
 
+/**
+ * hook_menu
+ */
 function npbs_api_menu(){
     $items = array();
+    // this array element is for testing purpose
     $items['npbs_apis/test'] = array(
         'title' => 'Test',
         'description' => 'Test',
         'page callback' => 'drupal_get_form',
         'page arguments' => array('npbs_api_main_form'),
-        'file' => 'resources/fields_resources.inc',
+        'file' => 'resources/form_resources.inc',
         'access callback' => TRUE,
     );
     $items['admin/config/custom/npbs_api'] = array(
@@ -23,6 +27,9 @@ function npbs_api_menu(){
     return $items;
 }
 
+/**
+ * hook_services_resources
+ */
 function npbs_api_services_resources(){
     $config_variables = variable_get('npbs_api_config_variables', array());
     $prefix = $config_variables['endpoint_prefix'];
@@ -32,6 +39,44 @@ function npbs_api_services_resources(){
     }
 
     $my_services = array();
+
+    $my_services[$prefix . '_field_collection_item'] = array(
+        'retrieve' => array(
+            'help' => t('Retrieve Field Collection using term_id'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_field_collection_item_retrieve',
+            'access callback' => '_npbs_api_service_access',
+            'args' => array(
+                array(
+                    'name' => 'term_id',
+                    'type' => 'int',
+                    'description' => 'Field collection term id',
+                    'source' => array('path' => 0),
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+        'create' => array(
+            'help' => t('Create New Field Collection Item'),
+            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
+            'callback' => '_npbs_api_field_collection_item_create',
+            'access callback' => '_npbs_api_service_access',
+            'access arguments' => array('field_collection_item resrource create'),
+            'access arguments append' => FALSE,
+            'args' => array(
+                array(
+                    'name' => 'data',
+                    'type' => 'struct',
+                    'description' => 'The Field Collection Item object',
+                    'source' => 'data',
+                    'optional' => FALSE,
+                ),
+            ),
+        ),
+    );
+
+    // Use following when we want to create new api instead of altering existing one
+
     /*$my_services[$prefix . '_node'] = array(
         'retrieve' => array(
             'help' => t('Retrieve node using nid'),
@@ -133,42 +178,8 @@ function npbs_api_services_resources(){
                 ),
             ),
         ),
-    );*/
-    $my_services[$prefix . '_field_collection_item'] = array(
-        'retrieve' => array(
-            'help' => t('Retrieve Field Collection using term_id'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
-            'callback' => '_npbs_api_field_collection_item_retrieve',
-            'access callback' => '_npbs_api_service_access',
-            'args' => array(
-                array(
-                    'name' => 'term_id',
-                    'type' => 'int',
-                    'description' => 'Field collection term id',
-                    'source' => array('path' => 0),
-                    'optional' => FALSE,
-                ),
-            ),
-        ),
-        'create' => array(
-            'help' => t('Create New Field Collection Item'),
-            'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/structure_resources'),
-            'callback' => '_npbs_api_field_collection_item_create',
-            'access callback' => '_npbs_api_service_access',
-            'access arguments' => array('field_collection_item resrource create'),
-            'access arguments append' => FALSE,
-            'args' => array(
-                array(
-                    'name' => 'data',
-                    'type' => 'struct',
-                    'description' => 'The Field Collection Item object',
-                    'source' => 'data',
-                    'optional' => FALSE,
-                ),
-            ),
-        ),
     );
-    /*$my_services[$prefix . '_allfields'] = array(
+    $my_services[$prefix . '_allfields'] = array(
         'index' => array(
             'help' => t('Fetch all fields'),
             'file' => array('type' => 'inc', 'module' => 'npbs_api', 'name' => 'resources/fields_resources'),
@@ -179,15 +190,24 @@ function npbs_api_services_resources(){
     return $my_services;
 }
 
+/**
+ * hook_url_inbount_alter
+ */
 function npbs_api_url_inbound_alter(&$path, $original_path, $path_language){
     $prefix = variable_get('npbs_api_config_variables', array())['endpoint_prefix'];
-    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '_', $path); // here sampleapi is endpoint
+    $path = preg_replace('/sampleapi\/' . $prefix . '\//', 'sampleapi/' . $prefix . '_', $path); // here sampleapi is endpoint, so change to your endpoint
 }
 
+/**
+ * access for the services
+ */
 function _npbs_api_service_access(){
     return TRUE;
 }
 
+/**
+ * hook_services_resources_alter
+ */
 function npbs_api_services_resources_alter(&$resources, &$endpoint){
     //TODO need to set access callback
     $temp_resources = array('node','taxonomy_term', 'taxonomy_vocabulary');
